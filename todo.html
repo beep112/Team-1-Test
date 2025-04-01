@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly To-Do | C. elegans Research Lab</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --lime-green: #82ff32;
+            --dark-bg: #111111;
+            --light-text: #ffffff;
+            --light-gray: #cccccc;
+            --dark-gray: #333333;
+            --transparent-gray: rgba(17, 17, 17, 0.7);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--dark-bg);
+            padding: 20px 0;
+            border-bottom: 2px solid var(--lime-green);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: var(--lime-green);
+            font-weight: 800;
+        }
+        
+        .worm-icon {
+            width: 50px;
+            height: 30px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--lime-green);
+        }
+        
+        nav a.active {
+            color: var(--lime-green);
+        }
+        
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--lime-green);
+        }
+        
+        /* Background Effects */
+        .background-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(130, 255, 50, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(130, 255, 50, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.2;
+        }
+        
+        .glow-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(130, 255, 50, 0.15) 0%, transparent 70%);
+            filter: blur(20px);
+        }
+        
+        .glow-1 {
+            top: -200px;
+            left: 20%;
+        }
+        
+        .glow-2 {
+            bottom: -200px;
+            right: 10%;
+        }
+        
+        /* Main Content Styles */
+        main {
+            padding: 40px 0;
+            position: relative;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--lime-green);
+        }
+        
+        .content-card {
+            background-color: var(--transparent-gray);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--lime-green);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* To-Do List Page Styles */
+        .week-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .current-week {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .week-navigation button {
+            background-color: transparent;
+            border: 1px solid var(--lime-green);
+            color: var(--lime-green);
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .week-navigation button:hover {
+            background-color: var(--lime-green);
+            color: var(--dark-bg);
+        }
+        
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .todo-item {
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--lime-green);
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .todo-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .todo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .todo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .todo-date {
+            color: var(--lime-green);
+            font-size: 14px;
+        }
+        
+        .todo-description {
+            color: var(--light-gray);
+            margin-bottom: 10px;
+        }
+        
+        .todo-resources {
+            margin-top: 15px;
+        }
+        
+        .todo-resources h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: var(--lime-green);
+        }
+        
+        .resource-link {
+            display: inline-block;
+            margin-right: 15px;
+            color: var(--light-text);
+            text-decoration: underline;
+            text-decoration-color: var(--lime-green);
+            transition: color 0.3s;
+        }
+        
+        .resource-link:hover {
+            color: var(--lime-green);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid var(--dark-gray);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copyright {
+            color: var(--light-gray);
+            font-size: 14px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .week-selector {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .week-navigation {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="background-effects">
+            <div class="grid-pattern"></div>
+            <div class="glow-circle glow-1"></div>
+            <div class="glow-circle glow-2"></div>
+        </div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="worm-icon" viewBox="0 0 50 30" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5,15 Q10,5 15,15 Q20,25 25,15 Q30,5 35,15 Q40,25 45,15" 
+                              fill="none" stroke="#82ff32" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="5" cy="15" r="2" fill="#82ff32"/>
+                        <circle cx="45" cy="15" r="2" fill="#82ff32"/>
+                    </svg>
+                    <h1>C. elegans <span>RESEARCH</span></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="todo.html" class="active">Weekly To-Do</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section - Weekly To-Do Page -->
+    <main>
+        <div class="container">
+            <h2 class="page-title">Weekly To-Do List</h2>
+            
+            <div class="content-card">
+                <div class="week-selector">
+                    <div class="current-week">Week of April 1-7, 2025</div>
+                    <div class="week-navigation">
+                        <button type="button">Previous Week</button>
+                        <button type="button">Next Week</button>
+                    </div>
+                </div>
+                
+                <ul class="todo-list">
+                    <!-- Example to-do items - you can update these -->
+                    <li class="todo-item">
+                        <div class="todo-header">
+                            <h3 class="todo-title">Read Research Papers</h3>
+                            <span class="todo-date">Due: April 3</span>
+                        </div>
+                        <p class="todo-description">Read the following papers on C. elegans neural development and prepare a one-paragraph summary of each paper's key findings.</p>
+                        <div class="todo-resources">
+                            <h4>Resources:</h4>
+                            <a href="#" class="resource-link">Smith et al. (2024)</a>
+                            <a href="#" class="resource-link">Johnson & Lee (2023)</a>
+                        </div>
+                    </li>
+                    
+                    <li class="todo-item">
+                        <div class="todo-header">
+                            <h3 class="todo-title">Lab Protocol Practice</h3>
+                            <span class="todo-date">Due: April 5</span>
+                        </div>
+                        <p class="todo-description">Complete the online simulation for C. elegans maintenance protocols. Take a screenshot of your completion certificate and upload it to the course portal.</p>
+                        <div class="todo-resources">
+                            <h4>Resources:</h4>
+                            <a href="#" class="resource-link">Lab Simulation Link</a>
+                            <a href="#" class="resource-link">Protocol Guide PDF</a>
+                        </div>
+                    </li>
+                    
+                    <li class="todo-item">
+                        <div class="todo-header">
+                            <h3 class="todo-title">Group Project Update</h3>
+                            <span class="todo-date">Due: April 7</span>
+                        </div>
+                        <p class="todo-description">Prepare a brief update (2-3 slides) on your group's research progress. Focus on your methodology and any preliminary results. Be ready to present in the next lab meeting.</p>
+                        <div class="todo-resources">
+                            <h4>Resources:</h4>
+                            <a href="#" class="resource-link">Presentation Template</a>
+                            <a href="#" class="resource-link">Group Project Guidelines</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">&copy; 2025 C. elegans Research Lab. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
