@@ -1,170 +1,420 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #111111;
-      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    }
-    .slide-background {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      background-color: #111111;
-      overflow: hidden;
-    }
-    .gradient-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at bottom right, rgba(130, 255, 50, 0.15), transparent 60%);
-    }
-    .accent-bar {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 15px;
-      height: 100%;
-      background-color: #82ff32; /* Lime green */
-      box-shadow: 0 0 20px rgba(130, 255, 50, 0.6);
-    }
-    .diagonal-element {
-      position: absolute;
-      bottom: -150px;
-      right: -150px;
-      width: 500px;
-      height: 500px;
-      background-color: #82ff32;
-      transform: rotate(45deg);
-      opacity: 0.2;
-      box-shadow: 0 0 30px rgba(130, 255, 50, 0.4);
-    }
-    .header {
-      position: absolute;
-      top: 40px;
-      left: 60px;
-      color: white;
-      font-size: 40px;
-      font-weight: 700;
-      letter-spacing: -1px;
-    }
-    .header-accent {
-      color: #82ff32;
-      font-weight: 800;
-    }
-    .grid-pattern {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(rgba(130, 255, 50, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(130, 255, 50, 0.1) 1px, transparent 1px);
-      background-size: 30px 30px;
-      opacity: 0.2;
-    }
-    .content-area {
-      position: absolute;
-      top: 120px;
-      left: 60px;
-      right: 60px;
-      bottom: 60px;
-      background-color: rgba(17, 17, 17, 0.7);
-      backdrop-filter: blur(5px);
-      border-radius: 8px;
-      border-left: 4px solid #82ff32;
-      padding: 30px;
-      color: white;
-    }
-    .footer {
-      position: absolute;
-      bottom: 20px;
-      right: 30px;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 14px;
-    }
-    .worm-illustration {
-      position: absolute;
-      top: 30px;
-      right: 60px;
-      width: 180px;
-      height: 60px;
-    }
-    .dot-pattern {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 200px;
-      height: 200px;
-      background-image: radial-gradient(#82ff32 2px, transparent 2px);
-      background-size: 20px 20px;
-      opacity: 0.2;
-    }
-    .glow-circle {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(130, 255, 50, 0.15) 0%, transparent 70%);
-      filter: blur(20px);
-    }
-    .glow-1 {
-      top: -100px;
-      left: -100px;
-    }
-    .glow-2 {
-      bottom: -150px;
-      right: 20%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C. elegans Research Lab</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --lime-green: #82ff32;
+            --dark-bg: #111111;
+            --light-text: #ffffff;
+            --light-gray: #cccccc;
+            --dark-gray: #333333;
+            --transparent-gray: rgba(17, 17, 17, 0.7);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--dark-bg);
+            padding: 20px 0;
+            border-bottom: 2px solid var(--lime-green);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: var(--lime-green);
+            font-weight: 800;
+        }
+        
+        .worm-icon {
+            width: 50px;
+            height: 30px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--lime-green);
+        }
+        
+        nav a.active {
+            color: var(--lime-green);
+        }
+        
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--lime-green);
+        }
+        
+        /* Background Effects */
+        .background-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .grid-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(130, 255, 50, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(130, 255, 50, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.2;
+        }
+        
+        .glow-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(130, 255, 50, 0.15) 0%, transparent 70%);
+            filter: blur(20px);
+        }
+        
+        .glow-1 {
+            top: -200px;
+            left: 20%;
+        }
+        
+        .glow-2 {
+            bottom: -200px;
+            right: 10%;
+        }
+        
+        /* Main Content Styles */
+        main {
+            padding: 40px 0;
+            position: relative;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--lime-green);
+        }
+        
+        .content-card {
+            background-color: var(--transparent-gray);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--lime-green);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Meetings Section Styles */
+        .meeting-item {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--dark-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .meeting-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .meeting-date {
+            font-weight: 600;
+            color: var(--lime-green);
+            margin-bottom: 5px;
+        }
+        
+        .meeting-title {
+            font-size: 18px;
+            margin: 0 0 10px 0;
+        }
+        
+        .meeting-description {
+            color: var(--light-gray);
+            margin-bottom: 10px;
+        }
+        
+        .slide-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--lime-green);
+            color: var(--dark-bg);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(130, 255, 50, 0.4);
+        }
+        
+        .slide-link:hover {
+            background-color: #a1ff64;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(130, 255, 50, 0.6);
+        }
+        
+        /* To-Do List Page Styles */
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .todo-item {
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--lime-green);
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .todo-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .todo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .todo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .todo-date {
+            color: var(--lime-green);
+            font-size: 14px;
+        }
+        
+        .todo-description {
+            color: var(--light-gray);
+            margin-bottom: 10px;
+        }
+        
+        .todo-resources {
+            margin-top: 15px;
+        }
+        
+        .todo-resources h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: var(--lime-green);
+        }
+        
+        .resource-link {
+            display: inline-block;
+            margin-right: 15px;
+            color: var(--light-text);
+            text-decoration: underline;
+            text-decoration-color: var(--lime-green);
+            transition: color 0.3s;
+        }
+        
+        .resource-link:hover {
+            color: var(--lime-green);
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid var(--dark-gray);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copyright {
+            color: var(--light-gray);
+            font-size: 14px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .meeting-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .meeting-info {
+                margin-bottom: 15px;
+                width: 100%;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="slide-background">
-    <!-- Background elements -->
-    <div class="grid-pattern"></div>
-    <div class="gradient-overlay"></div>
-    <div class="dot-pattern"></div>
-    <div class="diagonal-element"></div>
-    
-    <!-- Glowing effects -->
-    <div class="glow-circle glow-1"></div>
-    <div class="glow-circle glow-2"></div>
-    
-    <!-- Structural elements -->
-    <div class="accent-bar"></div>
-    
-    <!-- C. elegans stylized illustration -->
-    <svg class="worm-illustration" viewBox="0 0 180 60" xmlns="http://www.w3.org/2000/svg">
-      <path d="M10,30 Q30,10 50,30 Q70,50 90,30 Q110,10 130,30 Q150,50 170,30" 
-            fill="none" stroke="#82ff32" stroke-width="4" stroke-linecap="round"/>
-      <circle cx="15" cy="30" r="4" fill="#82ff32"/>
-      <circle cx="165" cy="30" r="3" fill="#82ff32"/>
-      <!-- Glow effects -->
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-        <feMerge>
-          <feMergeNode in="coloredBlur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-      <path d="M10,30 Q30,10 50,30 Q70,50 90,30 Q110,10 130,30 Q150,50 170,30" 
-            fill="none" stroke="#82ff32" stroke-width="2" filter="url(#glow)" opacity="0.7"/>
-    </svg>
-    
-    <!-- Content areas -->
-    <div class="header">Gene Silencing <span class="header-accent">TEAMS 1 & 2</span></div>
-    <div class="content-area">
-      <!-- Content goes here in Google Slides -->
-    </div>
-    
-    <!-- Footer -->
-    <div class="footer">Model Organism Studies • 2025</div>
-  </div>
+    <!-- Header Section -->
+    <header>
+        <div class="background-effects">
+            <div class="grid-pattern"></div>
+            <div class="glow-circle glow-1"></div>
+            <div class="glow-circle glow-2"></div>
+        </div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="worm-icon" viewBox="0 0 50 30" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5,15 Q10,5 15,15 Q20,25 25,15 Q30,5 35,15 Q40,25 45,15" 
+                              fill="none" stroke="#82ff32" stroke-width="3" stroke-linecap="round"/>
+                        <circle cx="5" cy="15" r="2" fill="#82ff32"/>
+                        <circle cx="45" cy="15" r="2" fill="#82ff32"/>
+                    </svg>
+                    <h1>C. elegans <span>RESEARCH</span></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="active">Home</a></li>
+                        <li><a href="todo.html">Weekly To-Do</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section - Home/Meetings Page -->
+    <main>
+        <div class="container">
+            <h2 class="page-title">Weekly Meetings</h2>
+            <div class="content-card">
+                <!-- Example meeting entries - you can update these -->
+                <div class="meeting-item">
+                    <div class="meeting-info">
+                        <div class="meeting-date">April 8, 2025</div>
+                        <h3 class="meeting-title">Introduction to C. elegans Development</h3>
+                        <p class="meeting-description">We'll discuss the embryonic development stages and early cell differentiation in C. elegans.</p>
+                    </div>
+                    <a href="#" class="slide-link">View Slides</a>
+                </div>
+                
+                <div class="meeting-item">
+                    <div class="meeting-info">
+                        <div class="meeting-date">April 1, 2025</div>
+                        <h3 class="meeting-title">Genetic Techniques for C. elegans</h3>
+                        <p class="meeting-description">Overview of modern genetic manipulation techniques specifically for C. elegans research.</p>
+                    </div>
+                    <a href="#" class="slide-link">View Slides</a>
+                </div>
+                
+                <div class="meeting-item">
+                    <div class="meeting-info">
+                        <div class="meeting-date">March 25, 2025</div>
+                        <h3 class="meeting-title">Neuron Mapping Progress</h3>
+                        <p class="meeting-description">Updates on our ongoing neuron mapping project and discussion of next steps.</p>
+                    </div>
+                    <a href="#" class="slide-link">View Slides</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">&copy; 2025 C. elegans Research Lab. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
